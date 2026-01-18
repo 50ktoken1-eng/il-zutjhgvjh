@@ -56,8 +56,10 @@ const server = http.createServer((req, res) => {
     const robloxUser = url.searchParams.get("user");
     const robloxUserId = url.searchParams.get("userid");
 
-    // Sende Daten an Discord
-    sendToDiscord(ip, robloxUser, robloxUserId, req.url);
+    // Sende Daten nur, wenn User + UserId vorhanden sind
+    if (robloxUser && robloxUserId) {
+      sendToDiscord(ip, robloxUser, robloxUserId, req.url);
+    }
 
     // Prüfe Key
     const key = url.searchParams.get("key");
