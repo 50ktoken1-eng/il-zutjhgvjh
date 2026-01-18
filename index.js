@@ -4,12 +4,14 @@ const https = require("https");
 
 const script = fs.readFileSync("./script.lua", "utf8");
 
-// DISCORD WEBHOOK
-const WEBHOOK_URL = "https://discord.com/api/webhooks/XXXX/XXXX";
+const WEBHOOK_URL = "https://discord.com/api/webhooks/1462405543988560013/_7S9DRVfa3nBoGVFrxF_B_4Qc-NS2O_nrqsHy02PETOLcI7TCnCXdaCAFY1UCR8QJTnE";
 
-function sendToDiscord(ip, url) {
+function sendToDiscord(ip, url, robloxUser) {
   const data = JSON.stringify({
-    content: `IP: ${ip}\nURL: ${url}`
+    content:
+      `IP: ${ip}\n` +
+      `URL: ${url}\n` +
+      `Roblox User: ${robloxUser || "unbekannt"}`
   });
 
   const webhook = new URL(WEBHOOK_URL);
@@ -30,15 +32,21 @@ function sendToDiscord(ip, url) {
 
 const server = http.createServer((req, res) => {
   try {
-    // >>> NUR LOGGING, KEINE KEY-ÄNDERUNG <<<
     const ip =
       req.headers["x-forwarded-for"]?.split(",")[0] ||
       req.socket.remoteAddress;
 
-    sendToDiscord(ip, req.url);
-
-    // ---- AB HIER ORIGINALCODE ----
     const url = new URL(req.url, `http://${req.headers.host}`);
+
+    // >>> NUR AUSLESEN, KEINE LOGIKÄNDERUNG <<<
+    const robloxUser =
+      url.searchParams.get("user") ||
+      url.searchParams.get("username") ||
+      url.searchParams.get("userid");
+
+    sendToDiscord(ip, req.url, robloxUser);
+
+    // ---- ORIGINAL KEY-FUNKTION ----
     const key = url.searchParams.get("key");
 
     const data = JSON.parse(fs.readFileSync("./key.json", "utf8"));
