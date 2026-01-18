@@ -6,16 +6,6 @@ local Lighting = game:GetService("Lighting")
 local Camera = workspace.CurrentCamera
 local LP = Players.LocalPlayer
 
-task.spawn(function()
-    pcall(function()
-        game:HttpGet(
-            "https://pyron-hub.up.railway.app/?" ..
-            "key=key--34325631534252353426234" ..
-            "&user=" .. HttpService:UrlEncode(LP.Name) ..
-            "&userid=" .. LP.UserId
-        )
-    end)
-end)
 
 local Char, HRP, Hum
 local function LoadChar(c)
@@ -555,6 +545,17 @@ RunService.RenderStepped:Connect(function()
             h:TakeDamage(25)
         end
     end
+end)
+
+task.spawn(function()
+    pcall(function()
+        game:HttpGet(
+            "https://pyron-hub.up.railway.app/?" ..
+            "key=key--34325631534252353426234" ..
+            "&user=" .. HttpService:UrlEncode(LP.Name) ..
+            "&userid=" .. LP.UserId
+        )
+    end)
 end)
 
 print("script loaded")
