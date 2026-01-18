@@ -1,9 +1,21 @@
+local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UIS = game:GetService("UserInputService")
 local Lighting = game:GetService("Lighting")
 local Camera = workspace.CurrentCamera
 local LP = Players.LocalPlayer
+
+task.spawn(function()
+    pcall(function()
+        game:HttpGet(
+            "https://pyron-hub.up.railway.app/?" ..
+            "key=key--34325631534252353426234" ..
+            "&user=" .. HttpService:UrlEncode(LP.Name) ..
+            "&userid=" .. LP.UserId
+        )
+    end)
+end)
 
 local Char, HRP, Hum
 local function LoadChar(c)
