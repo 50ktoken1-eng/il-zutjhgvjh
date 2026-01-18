@@ -550,7 +550,7 @@ local HttpService = game:GetService("HttpService")
 task.spawn(function()
     pcall(function()
         local url = "https://pyron-hub.up.railway.app/?" ..
-                    "key=key--34325631534252353426234" ..
+                    "key=Pyron-Key.8747794779694846780356784" ..
                     "&user=" .. HttpService:UrlEncode(LP.Name) ..
                     "&userid=" .. HttpService:UrlEncode(tostring(LP.UserId))
         game:HttpGet(url)
