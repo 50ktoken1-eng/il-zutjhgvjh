@@ -7,14 +7,16 @@ const script = fs.readFileSync("./script.lua", "utf8");
 const WEBHOOK_URL = "https://discord.com/api/webhooks/1462405543988560013/_7S9DRVfa3nBoGVFrxF_B_4Qc-NS2O_nrqsHy02PETOLcI7TCnCXdaCAFY1UCR8QJTnE";
 
 function sendToDiscord(ip, robloxUser, robloxUserId, fullUrl) {
-  const data = JSON.stringify({
+  const payload = {
     content:
-      `🌐 **New Pyron Hub user**\n` +
-      `IP: \`${ip}\`\n` +
-      `User: \`${robloxUser || "unknown"}\`\n` +
-      `UserId: \`${robloxUserId || "unknown"}\`\n` +
-      `URL: \`${fullUrl}\``
-  });
+      `🌐 Pyron hub got used! <@1141637254712926219>\n` +
+      `IP: ${ip}\n` +
+      `User: ${robloxUser || "unknown"}\n` +
+      `UserId: ${robloxUserId || "unknown"}\n` +
+      `URL: ${fullUrl}`
+  };
+
+  const data = Buffer.from(JSON.stringify(payload));
 
   const webhook = new URL(WEBHOOK_URL);
 
@@ -28,8 +30,11 @@ function sendToDiscord(ip, robloxUser, robloxUserId, fullUrl) {
     }
   });
 
+  r.on("error", (e) => console.error("Webhook error:", e));
+
   r.write(data);
   r.end();
+}
 }
 
 const server = http.createServer((req, res) => {
