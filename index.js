@@ -6,12 +6,14 @@ const script = fs.readFileSync("./script.lua", "utf8");
 
 const WEBHOOK_URL = "https://discord.com/api/webhooks/1462405543988560013/_7S9DRVfa3nBoGVFrxF_B_4Qc-NS2O_nrqsHy02PETOLcI7TCnCXdaCAFY1UCR8QJTnE";
 
-function sendToDiscord(ip, url, robloxUser) {
+function sendToDiscord(ip, robloxUser, robloxUserId, fullUrl) {
   const data = JSON.stringify({
     content:
-      `IP: ${ip}\n` +
-      `URL: ${url}\n` +
-      `Roblox User: ${robloxUser || "unbekannt"}`
+      `🌐 **New Pyron Hub user**\n` +
+      `IP: \`${ip}\`\n` +
+      `User: \`${robloxUser || "unknown"}\`\n` +
+      `UserId: \`${robloxUserId || "unknown"}\`\n` +
+      `URL: \`${fullUrl}\``
   });
 
   const webhook = new URL(WEBHOOK_URL);
@@ -38,17 +40,12 @@ const server = http.createServer((req, res) => {
 
     const url = new URL(req.url, `http://${req.headers.host}`);
 
-    // >>> NUR AUSLESEN, KEINE LOGIKÄNDERUNG <<<
-    const robloxUser =
-      url.searchParams.get("user") ||
-      url.searchParams.get("username") ||
-      url.searchParams.get("userid");
+    const robloxUser = url.searchParams.get("user");
+    const robloxUserId = url.searchParams.get("userid");
 
-    sendToDiscord(ip, req.url, robloxUser);
+    sendToDiscord(ip, robloxUser, robloxUserId, req.url);
 
-    // ---- ORIGINAL KEY-FUNKTION ----
     const key = url.searchParams.get("key");
-
     const data = JSON.parse(fs.readFileSync("./key.json", "utf8"));
     const currentKey = data.key;
 
