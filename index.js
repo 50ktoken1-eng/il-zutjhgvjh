@@ -20,7 +20,7 @@ function getIP(req) {
 function sendToDiscord(ip, robloxUser, robloxUserId, fullUrl) {
   const payload = {
     content:
-      `🌐 Pyron hub got used! <@1141637254712926219>\n` +
+      `🌐 Pyron hub got used! <@1141637254712926219> | <@1344004960106319872>\n` +
       `IP: ${ip}\n` +
       `User: ${robloxUser || "unknown"}\n` +
       `UserId: ${robloxUserId || "unknown"}\n` +
