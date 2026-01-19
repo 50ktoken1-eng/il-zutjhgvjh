@@ -64,6 +64,7 @@ Instance.new("UICorner", minimize)
 
 local minimized = false
 local oldSize = main.Size
+local visibilityCache = {}
 
 minimize.MouseButton1Click:Connect(function()
     minimized = not minimized
@@ -72,24 +73,27 @@ minimize.MouseButton1Click:Connect(function()
         oldSize = main.Size
         main.Size = UDim2.new(oldSize.X.Scale, oldSize.X.Offset, 0, 50)
 
+        visibilityCache = {}
+
         for _,v in ipairs(main:GetDescendants()) do
-            if v ~= top and not v:IsDescendantOf(top) then
-                if v:IsA("GuiObject") then
-                    v.Visible = false
-                end
+            if v:IsA("GuiObject") and v ~= top and not v:IsDescendantOf(top) then
+                visibilityCache[v] = v.Visible
+                v.Visible = false
             end
         end
 
         minimize.Text = "Open"
+
     else
         main.Size = oldSize
 
-        for _,v in ipairs(main:GetDescendants()) do
-            if v:IsA("GuiObject") then
-                v.Visible = true
+        for v,wasVisible in pairs(visibilityCache) do
+            if v and v.Parent then
+                v.Visible = wasVisible
             end
         end
 
+        visibilityCache = {}
         minimize.Text = "Minimize"
     end
 end)
