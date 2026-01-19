@@ -46,7 +46,7 @@ topGradient.Color = ColorSequence.new{
 }
 local title = Instance.new("TextLabel", top)
 title.Size = UDim2.new(1,0,1,0)
-title.Text = "Pyron HUB V1"
+title.Text = "Pyron HUB V1.1"
 title.Font = Enum.Font.GothamBlack
 title.TextSize = 18
 title.TextColor3 = Color3.fromRGB(255,255,255)
@@ -63,15 +63,28 @@ minimize.BackgroundColor3 = Color3.fromRGB(80,0,80)
 Instance.new("UICorner", minimize)
 
 local minimized = false
+local oldSize = main.Size
 minimize.MouseButton1Click:Connect(function()
     minimized = not minimized
-    main.Size = minimized and UDim2.new(0,700,0,50) or UDim2.new(0,700,0,500)
-    for _,v in pairs(main:GetChildren()) do
-        if v ~= top then
-            v.Visible = not minimized
+
+    if minimized then
+        oldSize = main.Size
+        main.Size = UDim2.new(oldSize.X.Scale, oldSize.X.Offset, 0, 50)
+        for _,v in pairs(main:GetChildren()) do
+            if v ~= top then
+                v.Visible = false
+            end
         end
+        minimize.Text = "Open"
+    else
+        main.Size = oldSize
+        for _,v in pairs(main:GetChildren()) do
+            if v ~= top then
+                v.Visible = true
+            end
+        end
+        minimize.Text = "Minimize"
     end
-    minimize.Text = minimized and "Open" or "Minimize"
 end)
 
 do
